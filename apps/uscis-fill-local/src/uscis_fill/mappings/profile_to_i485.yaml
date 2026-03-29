@@ -1,0 +1,11 @@
+# Map canonical profile keys → I-485 AcroForm field names.
+# Verified against documents/i-485.pdf (USCIS fillable): Part 1 uses Pt1Line1_* for item 1
+# (current legal name), not Pt1Line1a_*.
+#
+# Field /TU (accessible label) for this widget:
+#   "Part 1. Information About You … 1. Your Current Legal Name … Enter Family Name, Last Name."
+# AcroForm /T: Pt1Line1_FamilyName[0]
+form_code: I-485
+form_version: "placeholder"
+field_map:
+  last_name: "form1[0].#subform[0].Pt1Line1_FamilyName[0]"

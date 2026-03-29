@@ -80,6 +80,10 @@
 <!--
   ACTION REQUIRED: The content in this section represents placeholders.
   Fill them out with the right functional requirements.
+
+  If the feature handles client, matter, or privileged information, functional
+  requirements MUST address confidentiality, access control, and retention at
+  a product-appropriate level (per Law Office Constitution).
 -->
 
 ### Functional Requirements

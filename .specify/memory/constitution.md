@@ -1,50 +1,55 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+Sync Impact Report
+Version: (unversioned template) → 1.0.0
+Modified principles: five template principle placeholders → I. Client Confidentiality & Data Minimization; II. Spec-Driven Delivery; III. Auditability & Accountability; IV. Testing Discipline; V. Simplicity & Justified Complexity
+Added sections: Legal & Compliance Constraints; Development Workflow & Quality Gates (replacing generic Section 2 and Section 3 placeholders)
+Removed sections: None
+Templates: .specify/templates/plan-template.md ✅ | .specify/templates/spec-template.md ✅ | .specify/templates/tasks-template.md ✅ | .specify/templates/checklist-template.md ✅ (no change required) | .specify/templates/agent-file-template.md ✅ (no change required)
+Follow-up TODOs: None
+-->
+
+# Law Office Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Client Confidentiality & Data Minimization
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+Systems MUST treat client and matter information as confidential. Features MUST collect and retain only data necessary for stated requirements. Access MUST follow least privilege; credentials and secrets MUST NOT be embedded in source code or logs. Rationale: Legal practice imposes confidentiality obligations; architecture and implementation must reflect them.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### II. Spec-Driven Delivery
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+User-visible behavior and material scope MUST be defined in `spec.md` before implementation proceeds. Implementation plans MUST reference the active specification; task lists MUST map to user stories or explicit requirements. Scope changes MUST update `spec.md` and the plan. Rationale: Traceability from need to delivery and predictable change control.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### III. Auditability & Accountability
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+Where features record or process client or matter data, designs MUST support traceability appropriate to the domain (for example: material state changes, authentication events, or access to sensitive records). Implementations MUST NOT disable logging, audit hooks, or monitoring solely to mask defects. Rationale: Defensible records support professional and regulatory expectations.
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+### IV. Testing Discipline
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+When the feature specification requests automated tests or defines acceptance scenarios, those tests MUST be implemented in the same delivery increment (red-green-refactor when feasible). Contract or integration tests are REQUIRED at boundaries between modules or external systems when those boundaries are in scope. Rationale: Reduces error risk in high-stakes domains.
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+### V. Simplicity & Justified Complexity
+
+Teams MUST prefer the simplest design that satisfies requirements and constitution gates. Additional layers, services, or abstractions MUST be justified in the implementation plan or complexity tracking. Undocumented complexity violates this constitution. Rationale: Simpler systems are easier to secure, test, and maintain.
+
+## Legal & Compliance Constraints
+
+- Features MUST align with applicable professional conduct rules and privacy obligations for the jurisdictions and practice areas in scope. When requirements are ambiguous, assumptions MUST be stated in the specification and confirmed before release.
+- Third-party services that process client or matter data MUST be identified in the plan with data flows, retention, and subprocessors as appropriate.
+- Cryptographic, retention, and access policies MUST match the sensitivity of data handled; use NEEDS CLARIFICATION in specs when policy is undecided.
+
+## Development Workflow & Quality Gates
+
+- The Constitution Check in `plan.md` MUST pass before Phase 0 research and MUST be re-evaluated after Phase 1 design.
+- Pull requests that touch authentication, client or matter data, or external integrations SHOULD be checked against this constitution; material conflicts require spec or plan updates before merge.
+- Use `/speckit.analyze` for non-trivial features to validate alignment before merge.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This constitution supersedes informal practices when they conflict. Amendments require editing `.specify/memory/constitution.md`, incrementing **CONSTITUTION_VERSION** under semantic rules, updating **Last Amended**, and propagating material changes to dependent templates and commands.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Versioning policy**: MAJOR for backward-incompatible principle changes or removals; MINOR for new principles or materially expanded guidance; PATCH for clarifications, wording, and non-semantic fixes.
+
+**Compliance review**: Reviewers SHOULD verify constitution gates on changes affecting privileged data, security controls, or regulatory posture.
+
+**Version**: 1.0.0 | **Ratified**: 2025-03-24 | **Last Amended**: 2025-03-24

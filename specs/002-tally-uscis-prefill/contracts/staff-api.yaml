@@ -1,0 +1,126 @@
+openapi: 3.0.3
+info:
+  title: Law Office Client Portal (Staff) — Representative API
+  version: 0.1.0
+  description: |
+    Authenticated staff-only endpoints for review and draft generation.
+    Actual paths and auth scheme follow implementation (Next.js Route Handlers, etc.).
+
+servers:
+  - url: https://portal.example.com
+    description: Production (placeholder)
+
+security:
+  - sessionAuth: []
+
+paths:
+  /api/matters/{matterId}/submissions:
+    get:
+      summary: List submissions for a matter
+      security:
+        - sessionAuth: []
+      parameters:
+        - name: matterId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  submissions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/SubmissionSummary'
+
+  /api/submissions/{submissionId}/review:
+    patch:
+      summary: Update review decision (approve or needs follow-up)
+      security:
+        - sessionAuth: []
+      parameters:
+        - name: submissionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReviewDecisionInput'
+      responses:
+        '200':
+          description: Updated
+        '409':
+          description: Conflict (e.g. invalid transition)
+
+  /api/submissions/{submissionId}/drafts:
+    post:
+      summary: Generate USCIS draft PDF(s) from approved structured profile
+      security:
+        - sessionAuth: []
+      parameters:
+        - name: submissionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                formCodes:
+                  type: array
+                  items:
+                    type: string
+                    example: I-485
+      responses:
+        '201':
+          description: Draft(s) created
+        '403':
+          description: Submission not approved or forbidden
+
+components:
+  securitySchemes:
+    sessionAuth:
+      type: apiKey
+      in: cookie
+      name: session
+      description: Placeholder — replace with session/JWT scheme used by implementation.
+
+  schemas:
+    SubmissionSummary:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        receivedAt:
+          type: string
+          format: date-time
+        reviewStatus:
+          type: string
+          enum: [pending, approved, needs_follow_up]
+
+    ReviewDecisionInput:
+      type: object
+      required:
+        - status
+      properties:
+        status:
+          type: string
+          enum: [approved, needs_follow_up]
+        notes:
+          type: string

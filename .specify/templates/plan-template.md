@@ -31,7 +31,13 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+Verify against `.specify/memory/constitution.md` (Law Office Constitution):
+
+- **Client confidentiality & data minimization**: Feature design limits collection/retention of client or matter data; access is least-privilege; secrets stay out of source control.
+- **Spec-driven delivery**: This plan and upcoming tasks trace to `spec.md`; any scope change is reflected in the spec.
+- **Auditability**: If the feature reads or writes client/matter data, the plan names what is logged or traceable and avoids designs that hide accountability.
+- **Testing discipline**: Boundaries (APIs, integrations) have a test approach when the spec calls for tests or acceptance scenarios.
+- **Simplicity**: Stack and structure choices are the minimum sufficient; any extra complexity is listed in [Complexity Tracking](#complexity-tracking) below with justification.
 
 ## Project Structure
 

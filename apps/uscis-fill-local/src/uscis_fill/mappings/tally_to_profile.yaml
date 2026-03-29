@@ -1,0 +1,18 @@
+# Map Tally export field keys → canonical structured case profile keys.
+# CSV headers are normalized to snake_case (see tally_import._header_to_field_key).
+# e.g. "Family Name (Last Name)" → family_name_last_name; "Last name" → last_name.
+mappings:
+  - source: family_name
+    target: last_name
+  - source: family_name_last_name
+    target: last_name
+  - source: last_name
+    target: last_name
+  - source: given_name
+    target: first_name
+  - source: given_name_first_name
+    target: first_name
+  - source: first_name
+    target: first_name
+  - source: date_of_birth
+    target: dob
