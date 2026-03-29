@@ -1,14 +1,21 @@
 openapi: 3.0.3
 info:
-  title: Law Office Client Portal (Staff) — Representative API
-  version: 0.1.0
+  title: Law Office — Representative Staff API (future hosted portal)
+  version: 0.2.0
   description: |
-    Authenticated staff-only endpoints for review and draft generation.
-    Actual paths and auth scheme follow implementation (Next.js Route Handlers, etc.).
+    **Not implemented** by `apps/uscis-fill-local` Streamlit v1.
+
+    Illustrative **authenticated** staff-only HTTP API for **matter-bound** submissions,
+    **review** decisions, and **database-backed** draft generation—aligned with
+    [data-model.md](../data-model.md). The **current** product fills PDFs from **uploaded**
+    Tally exports + templates in-process without these endpoints.
+
+    If the firm stays local-only, treat this file as a **reference** for a possible
+    Node, FastAPI, or other hosted tier—not as a contract the Python desktop tool exposes.
 
 servers:
   - url: https://portal.example.com
-    description: Production (placeholder)
+    description: Production placeholder (future hosted staff portal)
 
 security:
   - sessionAuth: []
@@ -65,7 +72,7 @@ paths:
 
   /api/submissions/{submissionId}/drafts:
     post:
-      summary: Generate USCIS draft PDF(s) from approved structured profile
+      summary: Generate USCIS draft PDF(s) from approved structured profile (persisted submission)
       security:
         - sessionAuth: []
       parameters:
@@ -98,7 +105,7 @@ components:
       type: apiKey
       in: cookie
       name: session
-      description: Placeholder — replace with session/JWT scheme used by implementation.
+      description: Placeholder — replace with session/JWT scheme used by a future implementation.
 
   schemas:
     SubmissionSummary:

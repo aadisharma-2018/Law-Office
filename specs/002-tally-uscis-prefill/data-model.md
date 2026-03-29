@@ -6,7 +6,16 @@
 
 ## Overview
 
-Logical model for a staff-facing portal that ties **Tally submissions** to **matters**, supports **review**, and drives **structured case profiles** for USCIS draft generation.
+Logical model for tying **Tally submissions** to **matters**, supporting **review**, and tracking **draft** artifacts. It describes the **full** product data shape aligned with [spec.md](./spec.md) **FR-002**–**FR-008**.
+
+### Implementation status (`apps/uscis-fill-local`)
+
+| Surface | Persistence |
+|--------|-------------|
+| **Streamlit + `uscis-fill` CLI** (primary today) | **None** for fill: Tally bytes → normalized **profile** (in memory) → filled PDF bytes. No `Submission` row is created. |
+| **Services** (`submission_service`, `review_service`, `draft_service`) | **SQLite** via SQLAlchemy when invoked with a **DB session**; suitable for future matter-bound UI (**FR-003**, **FR-004**) and auditable draft history (**FR-008**). |
+
+The **shipped** user experience does **not** require staff to pick a `matter_id`; matter identifiers may still appear inside a **Tally export** (hidden fields) for when the DB import path is used.
 
 ---
 

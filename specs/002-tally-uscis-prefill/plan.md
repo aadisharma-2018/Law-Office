@@ -1,8 +1,8 @@
 # Implementation Plan: Tally Questionnaire Intake and USCIS Form Prefill
 
-**Branch**: `002-tally-uscis-prefill` | **Date**: 2025-03-24 | **Spec**: [spec.md](/Users/aadisharma/Desktop/Law-Office/specs/002-tally-uscis-prefill/spec.md)
+**Branch**: `002-tally-uscis-prefill` | **Date**: 2025-03-24 | **Spec**: [spec.md](./spec.md)
 
-**Input**: Feature specification from `/Users/aadisharma/Desktop/Law-Office/specs/002-tally-uscis-prefill/spec.md`
+**Input**: Feature specification from `specs/002-tally-uscis-prefill/spec.md`
 
 ## Summary
 
@@ -10,7 +10,9 @@ Per [spec.md](./spec.md) (**FR-010**, Session 2026-03-24), the **primary** deliv
 
 Staff may still **email unique Tally links** from **office email** (earlier clarifications). **Tally webhooks** and a **hosted** staff portal are **optional** accelerators, **not** prerequisites: **FR-010** explicitly allows **network-hosted** automation only as **optional** convenience.
 
-**Implication for implementation:** favor a **simple Python** desktop or CLI-first tool ([spec.md](./spec.md) Session 2026-03-24) with **file-based import** + **PDF fill** + **review**; add **hosted webhook + sync** later only if desired. Subprocessors for MVP: **Tally** (forms + exports); **optional** host/DB/IdP if cloud features are adopted. See [research.md](./research.md).
+**Implemented (2026-03-29):** [apps/uscis-fill-local](../../apps/uscis-fill-local/) delivers **Streamlit** + **`uscis-fill` CLI**: upload **Tally export (CSV/JSON)** + **USCIS fillable PDF** → **Fill PDF** → **DRAFT** download. **`simple_fill`** / **`pypdf`** implement the core loop. **Review** and **draft_service** (SQLite) exist in the package but are **not** wired into that UI yet ([tasks.md](./tasks.md)).
+
+**Implication for implementation:** **Python** localhost tool with **file-based import** + **PDF fill** is **shipped**; **in-app review** and **hosted webhook + sync** are **later** increments if desired. Subprocessors for the shipped slice: **Tally** (forms + exports) only. See [research.md](./research.md).
 
 ## Technical Context
 

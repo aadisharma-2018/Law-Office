@@ -2,8 +2,32 @@
 
 **Feature Branch**: `002-tally-uscis-prefill`  
 **Created**: 2025-03-24  
-**Status**: Draft  
+**Status**: Draft (local fill tool implemented; invitation/review/DB workflows beyond minimal path not required for core FR-010)  
 **Input**: User description: "I want to send the questionares to my clients via tally.so. Once they sent back the inforamtion i need to review and auto-fill the USCIS form based on the information on the questionare. what is the best way to go about implementing this?"
+
+## Current implementation — local fill app (`apps/uscis-fill-local`)
+
+Staff use a **minimal local-first** tool that takes **two file inputs** and produces a **draft** filled PDF. This matches **FR-010** (core read/map/fill runs locally) without requiring webhooks, hosted portals, or a database for the primary path.
+
+### Streamlit UI
+
+1. **Tally export** — upload the questionnaire export (**CSV** is the primary format; **JSON** is also accepted for compatibility and testing). The app parses and normalizes rows into a canonical profile (see `tally_import`, normalization, and Tally-to-profile mapping assets in the app).
+2. **USCIS fillable PDF** — upload the **official fillable PDF** (AcroForm template) that should receive the mapped values.
+3. **Form mapping** — the bundled UI offers **I-485**; field names are driven by `mappings/profile_to_i485.yaml` (staff can edit mappings to match their PDF’s AcroForm field names).
+4. **Fill PDF** — when both files are present, the user clicks **Fill PDF**. The app fills the template from the normalized profile, then:
+   - shows a **preview** of the normalized profile;
+   - **warns** with any PDF fields that were not filled (missing intake value or field name mismatch);
+   - offers **Download DRAFT PDF** for attorney review (**not** for filing as-is).
+
+Copy in the UI states explicitly that output is a draft for professional review.
+
+### Command-line equivalent
+
+The same pipeline is available via `uscis-fill`：**`--tally`** (path to `.csv` or `.json`), **`--template`** (path to `.pdf`), **`--out`** (output path), optional **`--form`** (default `I-485`). No database is used on this path.
+
+### Scope note
+
+The **full** product vision in this specification still includes unique invitation links, structured matter binding, in-app review approval, and traceability (**FR-001–FR-009**). The **currently shipped** user-facing workflow for turning a downloaded Tally export and a downloaded USCIS template into a draft PDF is the **two-input + Fill PDF** flow above; other requirements remain targets for later increments unless explicitly deferred. Setup and verification: [quickstart.md](./quickstart.md); task-level deltas: [tasks.md](./tasks.md).
 
 ## Clarifications
 
@@ -61,9 +85,11 @@ An authorized firm user opens a submitted questionnaire, verifies completeness a
 
 After approval, an authorized user generates draft USCIS forms populated from the structured information derived from the questionnaire, for attorney review before any filing. Generation and field mapping run **on firm-controlled systems** (**local-first** per **FR-010**), using **downloaded** official USCIS form files as the fill targets.
 
+**Implemented slice (today)**: Staff provide a **downloaded Tally export** and a **downloaded USCIS fillable PDF**, then run the local app and click **Fill PDF** (or use the CLI). That path assumes the firm has already satisfied review outside the tool if required by policy; the app still labels output as a **draft** and surfaces unfilled fields (**FR-006**). A future increment can enforce **FR-004** (in-app approval gating) before generation.
+
 **Why this priority**: This delivers the time savings after the firm trusts the underlying data.
 
-**Independent Test**: From an approved structured record with known test values, request generation of at least one supported USCIS draft and confirm populated fields match the approved values (allowing normal formatting differences).
+**Independent Test**: From an approved structured record with known test values, request generation of at least one supported USCIS draft and confirm populated fields match the approved values (allowing normal formatting differences). For the shipped app, use a known-good CSV/JSON export and template and assert field values and unfilled warnings after **Fill PDF**.
 
 **Acceptance Scenarios**:
 

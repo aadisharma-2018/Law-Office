@@ -1,5 +1,7 @@
 # Inbound contract: Tally → Firm application
 
+**Status:** **Optional / future.** The **shipped** [uscis-fill-local](../../apps/uscis-fill-local/) workflow uses **downloaded** Tally **CSV/JSON** files + **Fill PDF** locally ([spec.md](../spec.md) **FR-010**). Use this contract when the firm adds a **hosted** webhook receiver.
+
 **Direction:** Tally’s servers send HTTP `POST` requests to a **firm-configured HTTPS endpoint** when a form response is submitted (event `FORM_RESPONSE`).
 
 ## Security

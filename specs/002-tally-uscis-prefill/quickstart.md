@@ -1,62 +1,82 @@
 # Quickstart: Tally Questionnaire Intake and USCIS Form Prefill
 
 **Branch**: `002-tally-uscis-prefill`  
-**Date**: 2025-03-24 (updated 2026-03-28: CSV local import)
+**Date**: 2025-03-24 (updated 2026-03-29: shipped `uscis-fill-local` workflow)
 
-This document is for developers once the repo contains the application scaffold (see [plan.md](./plan.md)). Until then, treat this as a **target** local-dev checklist.
+This document is the **onboarding checklist** for [apps/uscis-fill-local](../../apps/uscis-fill-local/README.md). A **hosted** portal + **webhooks** remain **optional** ([spec.md](./spec.md) **FR-010**); they are **not** required to run the tool below.
 
 ## Prerequisites
 
-- Node.js 20 LTS
-- PostgreSQL 15+ (local or Docker)
-- Tally account with API access for webhook registration
-- (Optional) Transactional email provider if the app will send invitations; **not** required if staff send links via **office email** only ([spec.md](./spec.md) FR-001 clarification)
+- **Python 3.11+**
+- **Tally** account (export questionnaires as **CSV** or **JSON**)
+- Official **USCIS fillable PDF** for the form you are mapping (e.g. I-485)
 
-## Environment variables (representative)
+**Not required for the shipped path:** Node.js, PostgreSQL, ngrok, or Tally API keys.
 
-| Variable | Purpose |
-|----------|---------|
-| `DATABASE_URL` | PostgreSQL connection string |
-| `TALLY_API_KEY` | Tally API bearer token (create webhooks, optional) |
-| `TALLY_WEBHOOK_SECRET` | Signing secret for webhook verification (if configured) |
-| `EMAIL_API_KEY` | Transactional email provider (omit if invitations are manual office email only) |
-| `AUTH_SECRET` | Session/JWT secret for staff auth |
-| `PUBLIC_APP_URL` | Base URL for webhook URL registration and any app-generated links |
-
-**Never commit secrets.** Use `.env.local` (gitignored) or a secret manager.
-
-## Tally form setup
-
-1. Create hidden fields for **`matterId`** and/or **`invitationId`** (or a single signed token) per [Tally hidden fields](https://tally.so/help/hidden-fields).
-2. Build invitation URLs: base form URL + query parameters that populate hidden fields.
-3. Register webhook: `FORM_RESPONSE` → `https://<your-domain>/api/webhooks/tally` (exact path per implementation).
-
-## Local file import (CSV / JSON)
-
-For the **local-first** path ([spec.md](./spec.md) **FR-010**, clarification Session 2026-03-28), staff typically **download results as CSV** from Tally (spreadsheet export) and pass that file to `apps/uscis-fill-local` (UI or CLI). **JSON** exports are still accepted. Multi-row CSV files: the implementation uses the **last** non-empty data row unless the firm configures otherwise—confirm against real exports during rollout.
-
-## Local webhook testing
-
-- Use **ngrok** (or similar) to expose localhost HTTPS for Tally to call.
-- Replay captured payloads in **contract tests** to avoid manual submits every time.
-
-## Database
+## Install and run the UI
 
 ```bash
-# After scaffold exists (illustrative)
-npx prisma migrate dev
+cd apps/uscis-fill-local
+python3 -m venv .venv
+source .venv/bin/activate   # Windows: .venv\Scripts\activate
+pip install -e ".[dev]"
+make ui
 ```
 
-## Verification checklist
+In the browser:
 
-- [ ] Webhook signature verification passes with test payload
-- [ ] Submission deduplication by Tally response id
-- [ ] Matter association matches hidden fields from invitation URL
-- [ ] Review blocks draft generation until `approved`
-- [ ] Audit log entries for review and draft generation
+1. Upload the **Tally export** (`.csv` or `.json`).
+2. Upload the **USCIS fillable PDF**.
+3. Choose **Form mapping** (bundled: **I-485**).
+4. Click **Fill PDF**, then **Download DRAFT PDF**.
+
+Adjust mappings if needed:
+
+- Tally columns → profile: `src/uscis_fill/mappings/tally_to_profile.yaml`
+- Profile → AcroForm names: `src/uscis_fill/mappings/profile_to_i485.yaml`
+
+## Command line (same pipeline, no database)
+
+```bash
+uscis-fill --tally path/to/export.csv --template path/to/AOS-form-fillable.pdf --out path/to/DRAFT-out.pdf
+```
+
+`--tally` accepts `.csv` or `.json`. Optional: `--form I-485`.
+
+## Tests
+
+```bash
+make test
+```
+
+## Optional: hosted / webhook path (future)
+
+If the firm adds a **network** tier later, the following become relevant ([contracts/](./contracts/)):
+
+| Variable (illustrative) | Purpose |
+|---------------------------|---------|
+| `DATABASE_URL` | PostgreSQL (hosted portal only) |
+| `TALLY_API_KEY` | Tally API (webhook registration) |
+| `TALLY_WEBHOOK_SECRET` | Webhook signature verification |
+| `AUTH_SECRET` | Staff session secret |
+| `PUBLIC_APP_URL` | Webhook callback base URL |
+
+For local webhook development you would expose **HTTPS** (e.g. ngrok) per [contracts/tally-webhook-inbound.md](./contracts/tally-webhook-inbound.md). This is **out of scope** for the current Python-only fill app.
+
+## Optional: SQLite / matter import (library)
+
+The package includes SQLAlchemy models and `submission_service.import_submission_file` for **matter-bound** imports (**FR-003**). There is **no** Streamlit screen for matter selection yet; use programmatically or extend the UI per [tasks.md](./tasks.md) (T020, T025).
+
+## Verification checklist (shipped app)
+
+- [ ] Streamlit: both files upload, **Fill PDF** enabled only when both present
+- [ ] Draft download opens; AcroForm fields match mapping for a known fixture
+- [ ] Unfilled PDF fields are listed when intake or names are missing
+- [ ] `uscis-fill` CLI writes the same draft bytes as the UI for the same inputs
+- [ ] (Optional future) Webhook signature verification; matter association from hidden fields
 
 ## References
 
-- [spec.md](./spec.md) — requirements
-- [data-model.md](./data-model.md) — entities
-- [contracts/](./contracts/) — inbound/outbound boundaries
+- [spec.md](./spec.md) — requirements and **Current implementation** section
+- [plan.md](./plan.md) — technical context
+- [data-model.md](./data-model.md) — entities (full product; partial use today)
