@@ -1,0 +1,55 @@
+{
+  "header": [
+    {
+      "id": "home",
+      "label": "Home",
+      "href": "/",
+      "placement": "header",
+      "order": 0
+    },
+    {
+      "id": "about",
+      "label": "About",
+      "href": "/about-us",
+      "placement": "header",
+      "order": 1
+    },
+    {
+      "id": "practice",
+      "label": "Practice areas",
+      "href": "/practice-areas",
+      "placement": "header",
+      "order": 2
+    },
+    {
+      "id": "book",
+      "label": "Book online",
+      "href": "/book-online",
+      "placement": "header",
+      "order": 3
+    },
+    {
+      "id": "contact",
+      "label": "Contact",
+      "href": "/contact-us",
+      "placement": "header",
+      "order": 4
+    }
+  ],
+  "footer": [
+    {
+      "id": "terms",
+      "label": "Terms",
+      "href": "/terms",
+      "placement": "footer",
+      "order": 0
+    },
+    {
+      "id": "disclaimer",
+      "label": "Disclaimer",
+      "href": "/disclaimer",
+      "placement": "footer",
+      "order": 1
+    }
+  ]
+}

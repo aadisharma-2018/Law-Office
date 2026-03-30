@@ -1,0 +1,10 @@
+{
+  "name": "law-office",
+  "private": true,
+  "workspaces": ["apps/*"],
+  "scripts": {
+    "firm-site:dev": "npm run dev -w firm-site",
+    "firm-site:build": "npm run build -w firm-site",
+    "firm-site:lint": "npm run lint -w firm-site"
+  }
+}
