@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Dependencies
 node_modules/
 
@@ -30,6 +29,3 @@ __pycache__/
 # IDE
 .idea/
 .vscode/
-=======
-node_modules
->>>>>>> 570492e (Updated files)
