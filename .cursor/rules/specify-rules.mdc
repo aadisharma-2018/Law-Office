@@ -6,13 +6,15 @@ alwaysApply: true
 
 # Law-Office Development Guidelines
 
-Auto-generated from all feature plans. Last updated: 2026-03-24
+Auto-generated from all feature plans. Last updated: 2026-03-29
 
 ## Active Technologies
 - TypeScript 5.x, Node.js 20 LTS (desktop shell, e.g. Tauri vs Electron, **TBD** at implementation kickoff) + UI + **pdf-lib** (or equivalent) for AcroForm fill; optional **Prisma** if embedded DB; **Next.js** only if a hosted portal is chosen—**local-first default** may use Vite/React or Tauri + webview (002-tally-uscis-prefill)
 - **SQLite or local files** for MVP local app; **PostgreSQL** if/when a hosted service is added (002-tally-uscis-prefill)
 - **Python 3.11+** (per [spec.md](./spec.md) clarification: simple Python stack) + **`pypdf`** or **PyMuPDF** for AcroForm/fillable PDF; **`sqlite3`** or **SQLAlchemy** + SQLite for local state; minimal UI via **Tkinter**, **CustomTkinter**, **PyQt/PySide**, or **Streamlit** for local browser—pick smallest that meets review UX; **`httpx`** / **`requests`** only if webhooks added later (002-tally-uscis-prefill)
 - **SQLite** or **flat files** under a firm-chosen data directory (002-tally-uscis-prefill)
+- **TypeScript 5.x**, **Node.js 20 LTS** + **Next.js** (App Router), **React**, **Tailwind CSS**; **MDX** (`@next/mdx` or `next-mdx-remote`) for content pages; **next/font** for web fonts; **ESLint** + **Prettier** (003-firm-site-replica)
+- **Git-tracked** content (`content/` MDX/MD); **no** firm client/matter database for v1 public site. Form leads optional: **serverless** handler + **email** or **CRM** webhook (planning detail). (003-firm-site-replica)
 
 - TypeScript 5.x, Node.js 20 LTS + Next.js (App Router), React, Prisma, pdf-lib (or equivalent PDF AcroForm library) (002-tally-uscis-prefill)
 
@@ -33,10 +35,10 @@ npm test && npm run lint
 TypeScript 5.x, Node.js 20 LTS: Follow standard conventions
 
 ## Recent Changes
+- 003-firm-site-replica: Added **TypeScript 5.x**, **Node.js 20 LTS** + **Next.js** (App Router), **React**, **Tailwind CSS**; **MDX** (`@next/mdx` or `next-mdx-remote`) for content pages; **next/font** for web fonts; **ESLint** + **Prettier**
 - 002-tally-uscis-prefill: Added **Python 3.11+** (per [spec.md](./spec.md) clarification: simple Python stack) + **`pypdf`** or **PyMuPDF** for AcroForm/fillable PDF; **`sqlite3`** or **SQLAlchemy** + SQLite for local state; minimal UI via **Tkinter**, **CustomTkinter**, **PyQt/PySide**, or **Streamlit** for local browser—pick smallest that meets review UX; **`httpx`** / **`requests`** only if webhooks added later
 - 002-tally-uscis-prefill: Added TypeScript 5.x, Node.js 20 LTS (desktop shell, e.g. Tauri vs Electron, **TBD** at implementation kickoff) + UI + **pdf-lib** (or equivalent) for AcroForm fill; optional **Prisma** if embedded DB; **Next.js** only if a hosted portal is chosen—**local-first default** may use Vite/React or Tauri + webview
 
-- 002-tally-uscis-prefill: Added TypeScript 5.x, Node.js 20 LTS + Next.js (App Router), React, Prisma, pdf-lib (or equivalent PDF AcroForm library)
 
 <!-- MANUAL ADDITIONS START -->
 <!-- MANUAL ADDITIONS END -->

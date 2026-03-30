@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# Next.js (firm-site)
+apps/firm-site/.next/
+apps/firm-site/out/
+apps/firm-site/playwright-report/
+apps/firm-site/test-results/
+
+# Python (uscis-fill-local)
+apps/uscis-fill-local/.venv/
+__pycache__/
+*.pyc
+*.egg-info/
+
+# IDE
+.idea/
+.vscode/
