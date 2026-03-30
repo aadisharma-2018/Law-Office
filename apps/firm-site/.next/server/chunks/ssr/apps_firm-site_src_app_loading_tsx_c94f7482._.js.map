@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///Users/sharad05/git/Law-Office/apps/firm-site/src/app/loading.tsx"],"sourcesContent":["export default function Loading() {\n  return (\n    <div\n      className=\"flex flex-1 flex-col items-center justify-center py-24\"\n      role=\"status\"\n      aria-live=\"polite\"\n    >\n      <span className=\"h-8 w-8 animate-spin rounded-full border-2 border-slate-300 border-t-slate-800\" />\n      <span className=\"sr-only\">Loading</span>\n    </div>\n  );\n}\n"],"names":[],"mappings":";;;;;;AAAe,SAAS;IACtB,qBACE,sQAAC;QACC,WAAU;QACV,MAAK;QACL,aAAU;;0BAEV,sQAAC;gBAAK,WAAU;;;;;;0BAChB,sQAAC;gBAAK,WAAU;0BAAU;;;;;;;;;;;;AAGhC","debugId":null}}]
-}
